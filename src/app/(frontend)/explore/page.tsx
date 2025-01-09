@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CourseCard from "@/components/CourseCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
@@ -13,11 +13,17 @@ import { Search } from "lucide-react";
 import { useBulkCoursesStore } from "@/store/courseStore/bulkCoursesStore";
 import { useProfileStore } from "@/store/ProfileStore/profileStore";
 import CategoryFilters from "@/components/ExplorePage/CategoryFilters";
+import { Pagination } from "@mui/material";
+
+const ITEMS_PER_PAGE = 3;
 
 const CoursesPage = () => {
   const { setFilter, courses, fetchCourses, isLoading, isSearching, filter } =
     useBulkCoursesStore();
   const { fetchProfile } = useProfileStore();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(courses.length / ITEMS_PER_PAGE);
 
   useEffect(() => {
     fetchProfile();
@@ -30,6 +36,7 @@ const CoursesPage = () => {
 
   const clearFilters = () => {
     setFilter("");
+    setCurrentPage(1);
   };
 
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -46,6 +53,11 @@ const CoursesPage = () => {
     window.addEventListener("keydown", keyDownHandler);
     return () => window.removeEventListener("keydown", keyDownHandler);
   });
+
+  const paginatedCourses = courses.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/80 py-12">
@@ -104,8 +116,8 @@ const CoursesPage = () => {
             Array(6)
               .fill(null)
               .map((_, index) => <SkeletonCard key={index} />)
-          ) : courses.length > 0 ? (
-            courses.map((course: Course) => (
+          ) : paginatedCourses.length > 0 ? (
+            paginatedCourses.map((course: Course) => (
               <motion.div
                 key={course.id}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -134,6 +146,22 @@ const CoursesPage = () => {
             </div>
           )}
         </motion.div>
+
+        {totalPages > 0 && (
+          <div className="mt-8 flex justify-center items-center gap-4">
+            <Pagination
+              className="flex justify-center mt-4"
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              size="small"
+              siblingCount={1}
+              showFirstButton
+              showLastButton
+            />
+          </div>
+        )}
+
         <DummyFooter />
       </div>
     </div>
