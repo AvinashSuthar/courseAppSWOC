@@ -169,7 +169,7 @@ export default function SignInPage() {
                 "font-medium text-primary underline underline-offset-4 hover:text-neutral-400 transition-colors"
               )}
             >
-              Sign up
+              Sign Up
             </Link>
           </p>
         </CardFooter>
