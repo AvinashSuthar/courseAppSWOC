@@ -7,7 +7,7 @@ export default function DummyFooter() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.6 }}
+      transition={{ duration: 0.6, delay: 0.7 }}
       className="text-center md:mt-20 mt-10 mb-10 md:p-12 p-6 bg-card rounded-2xl border border-border/50 shadow-lg"
     >
       <h2 className="text-2xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
